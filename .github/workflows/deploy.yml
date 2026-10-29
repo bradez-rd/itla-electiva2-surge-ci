@@ -1,0 +1,23 @@
+name: Deploy to Surge
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Publicar en Surge
+        run: npx surge@latest . "$SURGE_DOMAIN"
+        env:
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+          SURGE_DOMAIN: ${{ vars.SURGE_DOMAIN }}
